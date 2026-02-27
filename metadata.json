@@ -1,0 +1,9 @@
+{
+  "name": "Remix: Sahasra AI - Institutional Intelligence OS 1",
+  "description": "Unified Metamerism Architecture. Institutional Intelligence Operating System connecting all clinical and financial hospital nodes.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}
