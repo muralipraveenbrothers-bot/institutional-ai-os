@@ -1,19 +1,35 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { useLocation } from "react-router-dom";
-import { ShieldCheck, Activity, Zap, Brain, Target } from 'lucide-react';
+import { ShieldCheck, Activity, Zap, Target } from 'lucide-react';
 import { isDevMode } from './Shared/AppEventToast';
 
 export function UniversalNavBar() {
-  const location = useLocation();
   const [evolutionMode, setEvolutionMode] = useState(isDevMode() ? "DEV" : "STABLE");
+  const [currentTime, setCurrentTime] = useState(() => new Date());
 
   useEffect(() => {
     const handleEvolutionChange = (e: any) => setEvolutionMode(e.detail.mode);
     window.addEventListener('evolution-mode-change', handleEvolutionChange);
     return () => window.removeEventListener('evolution-mode-change', handleEvolutionChange);
   }, []);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const digitalTime = currentTime.toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  });
+  const digitalDate = currentTime.toLocaleDateString([], {
+    month: 'short',
+    day: '2-digit',
+    year: 'numeric',
+  });
 
   return (
     <motion.div
@@ -54,6 +70,11 @@ export function UniversalNavBar() {
       </div>
 
       <div className="flex items-center gap-3 shrink-0">
+        <div className="hidden md:flex flex-col items-end mr-2">
+          <p className="text-[8px] font-black text-gray-600 uppercase tracking-widest leading-none">Digital Watch</p>
+          <p className="text-[11px] font-black text-emerald-400 uppercase tracking-[0.12em] mt-1 tabular-nums">{digitalTime}</p>
+          <p className="text-[8px] font-bold text-emerald-500/70 uppercase tracking-[0.2em] mt-0.5">{digitalDate}</p>
+        </div>
         <div className="hidden md:flex flex-col items-end">
           <p className="text-[8px] font-black text-gray-600 uppercase tracking-widest leading-none">Access Node</p>
           <p className="text-[10px] font-black text-cyan-500 uppercase tracking-widest mt-1 italic">Role-Authorized</p>
